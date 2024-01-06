@@ -4,10 +4,13 @@ var counter = 0;
 var imgMap = new Map();
 // Function to populate the Map with image data
 function populateImageMap() {
-    const imageKeys = ['1', '2', '3', '4', '5', '6']; // Assuming these are your keys
+    const imageKeys = [];
 
+    for (let i = 1; i <= 50; i++) {
+      imageKeys.push(i.toString());
+    }
     imageKeys.forEach(key => {
-        const imagePath = `public/${key}.png`;
+        const imagePath = `public/${key}.jpg`;
         const imageData = fs.readFileSync(imagePath);
         const base64Image = Buffer.from(imageData).toString('base64');
         imgMap.set(key, base64Image);
@@ -28,7 +31,7 @@ function mockObjDet() {
         height: 120,
         class: 'car'
     }
-    const img = imgMap.get(`${(counter % 6) + 1}`)
+    const img = imgMap.get(`${(counter % 50) + 1}`)
     let mockFormat = {
         images: [img, img, img],
         objects_top: [mockObj],
