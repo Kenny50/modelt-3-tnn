@@ -1,0 +1,6 @@
+version: '3'
+services:
+  nms:
+    container_name: nms
+    image: illuspas/node-media-server
+    network_mode: host
