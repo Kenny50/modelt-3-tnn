@@ -1,0 +1,18 @@
+version: '3'
+services:
+  ffmpeg-right:
+    container_name: ffmpeg-right
+    image: linuxserver/ffmpeg
+    network_mode: host
+    # restart: unless-stopped
+    volumes:
+      - "./public:/data"
+    environment:
+      - FFREPORT=file=/data/right.log:level=24
+    command: >
+      -re -y -f image2 -loop 1 -i /data/objects_right.jpg
+      -vcodec libx264 -f flv -flvflags no_duration_filesize -drop_pkts_on_overflow 1 -attempt_recovery 1 -recovery_wait_time 1
+      -loglevel warning
+      rtmp://192.168.0.4:1935/live/right
+    # networks:
+    #   - host

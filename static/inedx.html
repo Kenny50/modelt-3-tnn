@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Player</title>
+    <script src="https://cdn.bootcss.com/flv.js/1.6.2/flv.min.js"></script>
+</head>
+<body>
+    <video id="videoElement"></video>
+    <button id="playButton">Play</button>
+
+    <script>
+        if (flvjs.isSupported()) {
+            console.log("Supported")
+            var videoElement = document.getElementById('videoElement');
+            var flvPlayer = flvjs.createPlayer({
+                type: 'flv',
+                url: 'http://localhost:8000/live/streamKey.flv'
+            });
+            flvPlayer.attachMediaElement(videoElement);
+            flvPlayer.load();
+
+            var playButton = document.getElementById('playButton');
+            playButton.addEventListener('click', function() {
+                console.log(flvjs.isSupported())
+                flvPlayer.play();
+            });
+        } else {
+            console.log("Not Supported")
+        }
+    </script>
+</body>
+</html>
