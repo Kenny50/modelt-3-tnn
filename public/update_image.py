@@ -18,15 +18,14 @@ def is_valid_image(file_path):
     try:
         with Image.open(file_path) as img:
             img.verify()  # Verifies if the file is a valid image
+            img.close()
         return True
     except Exception as e:
         print(f"Invalid image: {e}")
         return False
     
 image_count = 1
-# font_path = "arial.ttf"  # Change this to the path of your desired font file
-# font_size = 24
-# font = ImageFont.truetype(font_path, font_size)
+
 text_color = (0, 0, 0)  # White color for the text
 
 objects_top = "objects_top.jpg"
@@ -52,20 +51,21 @@ while True:
     # Save modified image to temporary file
     tmp_with_time = f"tmp_with_time.jpg"
     img.save(tmp_with_time)
+    tmp_with_time_bas64 = convert_to_base64(tmp_with_time)
 
-    write_to_tmp(convert_to_base64(tmp_with_time), objects_top_tmp)
+    if(not is_valid_image(objects_top) or not is_valid_image(objects_left) or not is_valid_image(objects_right)):
+       break
+
+    write_to_tmp(tmp_with_time_bas64, objects_top_tmp)
     if(is_valid_image(objects_top_tmp)):
-        # Atomic file update using 'mv'
         os.rename(objects_top_tmp, objects_top)
 
-    write_to_tmp(convert_to_base64(tmp_with_time), objects_left_tmp)
+    write_to_tmp(tmp_with_time_bas64, objects_left_tmp)
     if(is_valid_image(objects_left_tmp)):
-        # Atomic file update using 'mv'
         os.rename(objects_left_tmp, objects_left)
 
-    write_to_tmp(convert_to_base64(tmp_with_time), objects_right_tmp)
+    write_to_tmp(tmp_with_time_bas64, objects_right_tmp)
     if(is_valid_image(objects_right_tmp)):
-        # Atomic file update using 'mv'
         os.rename(objects_right_tmp, objects_right)
     
     # Move to the next image after 66ms
