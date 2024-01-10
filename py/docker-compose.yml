@@ -1,0 +1,8 @@
+# docker-compose.yml
+version: '3'
+services:
+  update_image:
+    image: python:3.11-slim
+    volumes:
+      - "../public:/app"
+    command: python3 update_image.py
