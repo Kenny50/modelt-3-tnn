@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  redis:
+    image: redis
+    # network_mode: host
+    container_name: red
+    command: ["redis-server", "--appendonly", "no", "--maxmemory", "500mb", "--maxmemory-policy", "allkeys-lru"]
+    ports:
+      - "6379:6379"
