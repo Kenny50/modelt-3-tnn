@@ -53,8 +53,8 @@ while True:
     img.save(tmp_with_time)
     tmp_with_time_bas64 = convert_to_base64(tmp_with_time)
 
-    if(not is_valid_image(objects_top) or not is_valid_image(objects_left) or not is_valid_image(objects_right)):
-       break
+    # if(not is_valid_image(objects_top) or not is_valid_image(objects_left) or not is_valid_image(objects_right)):
+    #    break
 
     write_to_tmp(tmp_with_time_bas64, objects_top_tmp)
     if(is_valid_image(objects_top_tmp)):
