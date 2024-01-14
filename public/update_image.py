@@ -28,17 +28,17 @@ image_count = 1
 
 text_color = (0, 0, 0)  # White color for the text
 
-objects_top = "objects_top.jpg"
-objects_left = "objects_left.jpg"
-objects_right = "objects_right.jpg"
+objects_top = "/app/objects_top.jpg"
+objects_left = "/app/objects_left.jpg"
+objects_right = "/app/objects_right.jpg"
 
-objects_top_tmp = "objects_top_tmp.jpg"
-objects_left_tmp = "objects_left_tmp.jpg"
-objects_right_tmp = "objects_right_tmp.jpg"
+objects_top_tmp = "/app/objects_top_tmp.jpg"
+objects_left_tmp = "/app/objects_left_tmp.jpg"
+objects_right_tmp = "/app/objects_right_tmp.jpg"
 # tmp_file = "tmp.jpg"
 
 while True:
-    image_path = f"{image_count}.jpg"
+    image_path = f"/app/{image_count}.jpg"
     base64_data = convert_to_base64(image_path)
     img = Image.open(image_path)
 
