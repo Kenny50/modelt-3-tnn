@@ -5,8 +5,10 @@ import numpy as np
 import redis
 import base64
 import atexit
+import os
 
-rtmp_url = "rtmp://127.0.0.1:1935/live/cv"
+rtmp_url = os.environ.get('rtmp_url')
+
 
 img_width = 250
 img_height = 250
