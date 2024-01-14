@@ -1,0 +1,13 @@
+version: '3'
+services:
+  ffmpeg-top:
+    platform: linux/x86_64
+    container_name: f-o-top
+    image: borda/docker_python-opencv-ffmpeg:cpu-py3.10-cv4.9.0
+    network_mode: host
+    restart: unless-stopped
+    volumes:
+      - "./:/data"
+      - "../public:/public"
+    command: >
+      sh -c "pip3 install --upgrade pip && pip3 install redis numpy && python3 /data/cv_stream.py"
