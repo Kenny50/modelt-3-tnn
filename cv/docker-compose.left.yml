@@ -8,8 +8,9 @@ services:
     restart: unless-stopped
     volumes:
       - "./:/data"
-      - "../public:/public"
+      # - "../public:/public"
     environment:
       rtmp_url: rtmp://127.0.0.1:1935/live/cv-left
+      position: left
     command: >
       sh -c "pip3 install --upgrade pip && pip3 install redis numpy && python3 /data/cv_stream.py"
