@@ -2,7 +2,6 @@ import cv2 as cv
 import base64
 import time
 import numpy as np
-from b64 import b64
 
 def draw_current_time(frame):
     current_time = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -18,8 +17,8 @@ image_count = 1
 
 # image_path = f"/Users/chang/nodejs/modelt-3-tnn/public/{image_count}.jpg"
 image_path = f"/Users/chang/nodejs/modelt-3-tnn/public/image.jpg"
-# base64_data = convert_to_base64(image_path)
-base64_data = b64
+base64_data = convert_to_base64(image_path)
+
 
 # Decode base64 data to bytes
 image_bytes = base64.b64decode(base64_data)
