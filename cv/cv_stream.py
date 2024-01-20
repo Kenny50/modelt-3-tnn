@@ -12,32 +12,19 @@ import os
 rtmp_url = os.environ.get('rtmp_url')
 # rtmp_url = 'rtmp://127.0.0.1:1935/live/cv-top'
 
-def generate_random_object(max_value=250):
-    x = random.randint(0, max_value)
-    y = random.randint(0, max_value)
-    # Ensure that max_value - x >= 1
-    width = random.randint(1, max(1, max_value - x))
-    # Ensure that max_value - y >= 1
-    height = random.randint(1, max(1, max_value - y))
-
-    classes = ['car', 'traffic_light', 'sign', 'person', 'dog']
-    class_label = random.choice(classes)
-
-    return {"x": x, "y": y, "width": width, "height": height, "class": class_label}
-
 colors = {
     'Car': (0, 255, 0),             # Green
     'Bus': (0, 255, 255),           # Yellow
     'Truck': (255, 0, 0),           # Blue
-    'Heavy Truck': (255, 192, 203),  # Pink
+    'Heavy_truck': (255, 192, 203),  # Pink
     'Motorcyclist': (135, 206, 250), # Sky Blue
     'Cyclist': (255, 165, 0),       # Orange
     'Wheelchair': (255, 69, 0),      # Red-Orange
     'Pedestrian': (255, 140, 105)    # Salmon
 }
 
-img_width = 640
-img_height = 360
+img_width = 320
+img_height = 180
 # command and params for ffmpeg
 command = ['ffmpeg',
     '-re',
@@ -50,18 +37,19 @@ command = ['ffmpeg',
     '-i', '-',
     '-c:v', 'libx264',
     '-pix_fmt', 'yuv420p',
-    '-preset', 'veryslow',
+    '-preset', 'veryfast',
     '-r', '15',  # Set the output frame rate
-    '-g', '30',  # Set keyframe interval 
-    # '-bufsize', '64M',  # Adjust the buffer size as needed
+    '-g', '5',  # Set keyframe interval 
+    '-bufsize', '64M',  # Adjust the buffer size as needed
     '-f', 'flv',
-    # '-maxrate', '4M',
+    '-threads', '2',  # Adjust the number of threads for encoding
     '-flvflags', 'no_duration_filesize',
     '-drop_pkts_on_overflow','1',
     '-attempt_recovery','1',
     '-recovery_wait_time','1',
     '-loglevel', 'warning',
     rtmp_url]
+
 
 
 p = subprocess.Popen(command, stdin=subprocess.PIPE)
@@ -79,10 +67,10 @@ def drawRectangle(frame, objects):
         class_label = obj["class"]
 
         # Draw a rectangle on the image with class-specific color
-        cv.rectangle(frame, (x, y), (x + width, y + height), colors[class_label], 2)
+        cv.rectangle(frame, (x, y), (x + width, y + height), colors[class_label], 1)
 
         # Display class label with class-specific color
-        cv.putText(frame, class_label, (x, y - 5), cv.FONT_HERSHEY_SIMPLEX, 0.5, colors[class_label], 2)
+        cv.putText(frame, class_label, (x, y - 5), cv.FONT_HERSHEY_SIMPLEX, 0.5, colors[class_label], 1)
     
 def base64_to_stdin(base64_data, objects):
 
@@ -95,16 +83,13 @@ def base64_to_stdin(base64_data, objects):
 
     # Decode the image array
     frame = cv.imdecode(nparr, cv.IMREAD_COLOR)
-    draw_current_time(frame)
+    # draw_current_time(frame)
     drawRectangle(frame, objects)
 
     # Write the frame to the FFmpeg subprocess
     p.stdin.write(frame.tobytes())
     # p.stdin.flush()
     del image_bytes, nparr, frame
-
-def message_handler(message):
-    base64_to_stdin(message['data'].decode('utf-8'))
 
 def subscribe_to_redis(topic="object_detection_2d"):
     r = redis.Redis(host='127.0.0.1', port=6379, db=0)
